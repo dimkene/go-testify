@@ -23,16 +23,15 @@ func TestMainHandlerWhenAllRight(t *testing.T) {
 }
 
 func TestMainHandWrongCity(t *testing.T) {
-	req := httptest.NewRequest("GET", "/cafe?count=10&city=mocsow", nil)
+	req := httptest.NewRequest("GET", "/cafe?count=4&city=mocsow", nil)
 	responseRecorder := httptest.NewRecorder()
 	handler := http.HandlerFunc(mainHandle)
 	handler.ServeHTTP(responseRecorder, req)
 
 	status := responseRecorder.Code
 	body := responseRecorder.Body.String()
-	require.Equal(t, http.StatusOK, status)
+	require.Equal(t, http.StatusBadRequest, status)
 	assert.Equal(t, "wrong city value", body)
-
 }
 
 func TestMainHandlerWhenCountMoreThanTotal(t *testing.T) {
@@ -50,5 +49,4 @@ func TestMainHandlerWhenCountMoreThanTotal(t *testing.T) {
 	body := responseRecorder.Body.String()
 	list := strings.Split(body, ",")
 	assert.Equal(t, totalCount, len(list))
-
 }
